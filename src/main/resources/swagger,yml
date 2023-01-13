@@ -1,0 +1,94 @@
+openapi: 3.0.3
+info:
+  title: OpenAI - Rest API
+  version: 1.0.0
+externalDocs:
+  description: Open AI Documentation
+  url: https://beta.openai.com/docs/api-reference/introduction
+servers:
+  - url: https://api.openai.com/v1
+tags:
+  - name: model
+    description: OpenAI Model
+paths:
+  /models:
+    get:
+      tags:
+        - model
+      summary: Finds All Models
+      description: Multiple status values can be provided with comma separated strings
+      operationId: getModels
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Model'
+        '400':
+          description: Invalid status value
+  /models/{model}:
+    get:
+      tags:
+        - model
+      summary: Finds All Models
+      description: Multiple status values can be provided with comma separated strings
+      operationId: getModelById
+      parameters:
+        - name: model
+          in: path
+          description: The ID of the model to be found
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+               $ref: '#/components/schemas/Model'
+        '400':
+          description: Invalid status value
+components:
+  schemas:
+    ModelsList:
+      type: object
+      properties:
+        object:
+          type: string
+          example: 'list'
+        data:
+          $ref: '#/components/schemas/Model'
+    Model:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The model ID
+          example: babbage
+        object:
+          type: string
+          description: The model name
+          example: model
+        created:
+          type: integer
+          description: The model created date timestamp
+          format: int32
+          example: 1649358449
+        owned_by:
+          type: string
+          description: The model owner
+          format: date-time
+        permission:
+          $ref: '#/components/schemas/Permission'
+        root:
+         type: string
+         description: The model root
+         example: text-embedding-ada-002
+        parent:
+         type: string
+    Permission:
+      type: object
